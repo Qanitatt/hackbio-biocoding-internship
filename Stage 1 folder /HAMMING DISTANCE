@@ -1,0 +1,20 @@
+def hamming_distance(name1, name2):
+    """Calculates the Hamming distance between two usernames, padding if needed."""
+    
+    # Ensure both strings are of equal length (if not, pad the shorter one with spaces)
+    max_len = max(len(name1), len(name2))
+    name1 = name1.ljust(max_len)  # Pad with spaces
+    name2 = name2.ljust(max_len)
+    
+    # Count the number of different characters
+    distance = sum(1 for a, b in zip(name1, name2) if a != b)
+    
+    return distance
+
+# Define Slack and X usernames
+slack_username = "@Qanitat"
+x_handle = "@_qanitat"
+
+# Compute and display Hamming distance
+distance = hamming_distance(slack_username, x_handle)
+print(f"Hamming Distance: {distance}")
