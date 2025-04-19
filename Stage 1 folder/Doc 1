@@ -1,0 +1,61 @@
+import re
+def dna_to_protein(dna_seq, reading_frame=0):
+    codon_table = {
+        "ATA": "I", "ATC": "I", "ATT": "I", "ATG": "M",
+        "ACA": "T", "ACC": "T", "ACG": "T", "ACT": "T",
+        "AAC": "N", "AAT": "N", "AAA": "K", "AAG": "K",
+        "AGC": "S", "AGT": "S", "AGA": "R", "AGG": "R",
+        "CTA": "L", "CTC": "L", "CTG": "L", "CTT": "L",
+        "CCA": "P", "CCC": "P", "CCG": "P", "CCT": "P",
+        "CAC": "H", "CAT": "H", "CAA": "Q", "CAG": "Q",
+        "CGA": "R", "CGC": "R", "CGG": "R", "CGT": "R",
+        "GTA": "V", "GTC": "V", "GTG": "V", "GTT": "V",
+        "GCA": "A", "GCC": "A", "GCG": "A", "GCT": "A",
+        "GAC": "D", "GAT": "D", "GAA": "E", "GAG": "E",
+        "GGA": "G", "GGC": "G", "GGG": "G", "GGT": "G",
+        "TCA": "S", "TCC": "S", "TCG": "S", "TCT": "S",
+        "TTC": "F", "TTT": "F", "TTA": "L", "TTG": "L",
+        "TAC": "Y", "TAT": "Y", "TAA": "", "TAG": "", "TGA": "*"
+    }
+
+    # Convert to uppercase and remove invalid characters
+    dna_seq = dna_seq.upper()
+    dna_seq = re.sub(r'[^ATGC]', '', dna_seq)
+
+    protein = ""
+
+    # Start from the specified reading frame (0, 1, or 2)
+    for i in range(reading_frame, len(dna_seq) - 2, 3):
+        codon = dna_seq[i:i+3]  # Get three-letter codon
+        amino_acid = codon_table.get(codon, "?")  # "?" for unknown codons
+
+        if amino_acid == "*":  # Stop codon reached
+            break
+
+        protein += amino_acid
+
+    return protein
+# Keep prompting the user for a valid DNA sequence
+while True:
+    dna_seq = input("Enter a DNA sequence: ").strip()
+    
+    if re.match(r'^[ATGCatgc]+$', dna_seq):  # Valid input
+        dna_seq = dna_seq.upper()
+        break  # Now inside a loop, so break works correctly
+    else:
+        print("Error: Invalid DNA sequence! Please enter only A, T, G, or C.")
+
+# Keep prompting the user for a valid reading frame
+while True:
+    try:
+        reading_frame = int(input("Enter the reading frame (0, 1, or 2): ").strip())
+        if reading_frame in [0, 1, 2]:  # Valid frame
+            break
+        else:
+            print("Error: Reading frame must be 0, 1, or 2.")
+    except ValueError:
+        print("Error: Please enter a valid number for the reading frame.")
+
+# Call the function and print the result
+protein = dna_to_protein(dna_seq, reading_frame)
+print(f"Translated Protein (Reading Frame {reading_frame}): {protein}")
