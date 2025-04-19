@@ -1,0 +1,25 @@
+import math
+
+def time_to_reach_80_percent(P0, K, r, T):
+    """Determines the time step when the population reaches 80% of carrying capacity (K)."""
+    
+    threshold = 0.8 * K  # 80% of the carrying capacity
+    for t in range(T + 1):  # Loop through time steps
+        P = K / (1 + ((K - P0) / P0) * math.exp(-r * t))  # Logistic growth equation
+        if P >= threshold:  # Check if population reaches 80% of K
+            return t  # Return the time step when this happens
+
+    return None  # Return None if 80% of K is never reached within T time steps
+
+# Get user input for parameters
+P0 = int(input("Enter initial population (P0): "))
+K = int(input("Enter carrying capacity (K): "))
+r = float(input("Enter growth rate (r): "))
+T = int(input("Enter total time steps (T): "))
+
+# Run the function and display the result
+time_reached = time_to_reach_80_percent(P0, K, r, T)
+if time_reached is not None:
+    print(f"The population reaches 80% of carrying capacity at time step {time_reached}.")
+else:
+    print("The population did not reach 80% of the carrying capacity within the given time.")
